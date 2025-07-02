@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Study Typer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Study Typer</h1>
+    <p>Reinforce your notes while practising typing speed</p>
+  </header>
+
+  <main class="container">
+    <section id="setupSection">
+      <textarea id="inputText" placeholder="Paste your study material here..." rows="8"></textarea>
+      <button id="startBtn" disabled>Start Practice</button>
+    </section>
+
+    <section id="raceSection" class="hidden">
+      <div id="displayText" class="display-text"></div>
+      <input type="text" id="typeInput" placeholder="Start typing here..." autocomplete="off" spellcheck="false" />
+      <div class="stats">
+        <span>Time: <strong id="timeStat">0s</strong></span>
+        <span>WPM: <strong id="wpmStat">0</strong></span>
+        <span>Accuracy: <strong id="accuracyStat">100%</strong></span>
+      </div>
+      <button id="resetBtn">Reset</button>
+    </section>
+  </main>
+
+  <footer>
+    <small>Inspired by TypeRacer • No data is stored.</small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html> 
