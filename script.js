@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const timeStat = document.getElementById('timeStat');
   const wpmStat = document.getElementById('wpmStat');
   const accuracyStat = document.getElementById('accuracyStat');
+  const resultModal = document.getElementById('resultModal');
+  const resultSummary = document.getElementById('resultSummary');
+  const closeModalBtn = document.getElementById('closeModalBtn');
 
   let text = '';
   let timerInterval = null;
@@ -35,6 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
   resetBtn.addEventListener('click', resetAll);
 
   typeInput.addEventListener('input', handleTyping);
+
+  closeModalBtn.addEventListener('click', () => {
+    resultModal.classList.add('hidden');
+  });
 
   function renderText(str) {
     // Clear previous content
@@ -114,9 +121,20 @@ document.addEventListener('DOMContentLoaded', () => {
     clearInterval(timerInterval);
     typeInput.disabled = true;
     highlightCurrentChar(text.length - 1);
+
+    // Prepare and show results
+    const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+    const wpm = wpmStat.textContent;
+    const accuracy = accuracyStat.textContent;
+    const chars = text.length;
+    const words = text.trim().split(/\s+/).length;
+
+    resultSummary.innerHTML = `You typed <strong>${chars}</strong> characters (<strong>${words}</strong> words) in <strong>${elapsedSeconds}</strong> seconds.<br/>WPM: <strong>${wpm}</strong> &bull; Accuracy: <strong>${accuracy}</strong>`;
+    resultModal.classList.remove('hidden');
   }
 
   function resetAll() {
+    resultModal.classList.add('hidden');
     setupSection.classList.remove('hidden');
     raceSection.classList.add('hidden');
     typeInput.disabled = false;
