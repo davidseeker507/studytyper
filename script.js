@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let text = '';
   let timerInterval = null;
   let startTime = null;
+  let cheated = false;
 
   // Enable start button when textarea has content
   inputText.addEventListener('input', () => {
@@ -132,11 +133,35 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateStats(correctChars, typedChars) {
+    if (cheated) return;
+
     const minutes = startTime ? (Date.now() - startTime) / 60000 : 0;
     const wpm = minutes > 0 ? Math.round((correctChars / 5) / minutes) : 0;
     const accuracy = typedChars > 0 ? Math.round((correctChars / typedChars) * 100) : 100;
+    if (!cheated && wpm > 300) {
+      handleCheat();
+      return;
+    }
     wpmStat.textContent = wpm;
     accuracyStat.textContent = `${accuracy}%`;
+  }
+
+  function handleCheat() {
+    cheated = true;
+    clearInterval(timerInterval);
+
+    // Reset view to start page
+    setupSection.classList.remove('hidden');
+    raceSection.classList.add('hidden');
+    typeInput.disabled = false;
+    inputText.value = '';
+    startBtn.disabled = true;
+    displayText.innerHTML = '';
+    resetStats();
+
+    // Show warning message
+    resultSummary.innerHTML = 'Whoa! Over 300 WPM? Please stop cheating and try again.';
+    resultModal.classList.remove('hidden');
   }
 
   function finish() {
@@ -156,6 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function resetAll() {
+    cheated = false;
     resultModal.classList.add('hidden');
     setupSection.classList.remove('hidden');
     raceSection.classList.add('hidden');
