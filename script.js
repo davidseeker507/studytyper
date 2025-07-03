@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const resultModal = document.getElementById('resultModal');
   const resultSummary = document.getElementById('resultSummary');
   const closeModalBtn = document.getElementById('closeModalBtn');
+  const themeToggle = document.getElementById('themeToggle');
 
   let text = '';
   let timerInterval = null;
@@ -42,6 +43,27 @@ document.addEventListener('DOMContentLoaded', () => {
   closeModalBtn.addEventListener('click', () => {
     resultModal.classList.add('hidden');
   });
+
+  // --- Theme handling ---
+  const storedTheme = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  applyTheme(storedTheme ? storedTheme === 'dark' : prefersDark);
+
+  themeToggle.addEventListener('click', () => {
+    const isDark = document.body.classList.toggle('dark');
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    themeToggle.textContent = isDark ? '☀️' : '🌙';
+  });
+
+  function applyTheme(dark) {
+    if (dark) {
+      document.body.classList.add('dark');
+      themeToggle.textContent = '☀️';
+    } else {
+      document.body.classList.remove('dark');
+      themeToggle.textContent = '🌙';
+    }
+  }
 
   function renderText(str) {
     // Clear previous content

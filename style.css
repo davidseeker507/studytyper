@@ -135,4 +135,125 @@ footer {
 /* Ensure hidden class overrides modal display */
 .modal.hidden {
   display: none;
+}
+
+/* Dark-mode toggle button */
+.theme-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: inherit;
+}
+
+/* Dark mode overrides */
+body.dark {
+  background: #121212;
+  color: #e5e5e5;
+}
+
+body.dark header {
+  background: #002b61;
+  color: #e5e5e5;
+}
+
+body.dark textarea#inputText,
+body.dark .display-text,
+body.dark #typeInput,
+body.dark .modal-content {
+  background: #1e1e1e;
+  color: #e5e5e5;
+  border-color: #333;
+}
+
+body.dark .stats {
+  color: #e5e5e5;
+}
+
+body.dark footer {
+  background: #1e1e1e;
+  color: #888;
+}
+
+body.dark .display-text .correct {
+  color: #81c995;
+}
+
+body.dark .display-text .incorrect {
+  color: #ef5350;
+}
+
+/* ---- IDE Look & Font ---- */
+body,
+textarea#inputText,
+.display-text,
+#typeInput,
+.stats,
+button,
+.modal-content,
+header,
+footer {
+  font-family: 'Fira Code', Menlo, Consolas, 'Courier New', monospace;
+}
+
+header {
+  background: #282c34; /* dark VS Code-ish */
+  color: #dcdfe4;
+  border-bottom: 1px solid #1e2127;
+  position: relative;
+}
+
+body:not(.dark) header {
+  background: #fafafa;
+  color: #24292e;
+  border-bottom: 1px solid #e1e4e8;
+}
+
+.display-text,
+#typeInput,
+textarea#inputText {
+  border-radius: 0;
+}
+
+/* Light IDE panel backgrounds */
+body:not(.dark) .display-text,
+body:not(.dark) #typeInput,
+body:not(.dark) textarea#inputText {
+  background: #f6f8fa;
+  border-color: #d0d7de;
+}
+
+/* Dark IDE panel backgrounds */
+body.dark .display-text,
+body.dark #typeInput,
+body.dark textarea#inputText {
+  background: #1e1e1e;
+  border-color: #333;
+}
+
+/* Stats bar like VSCode status bar */
+.stats {
+  background: #eaecef;
+  border-top: 1px solid #d0d7de;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+}
+
+body.dark .stats {
+  background: #0d1117;
+  border-top: 1px solid #30363d;
+}
+
+/* Theme button inside header */
+.theme-btn {
+  top: 0.6rem;
+  right: 0.6rem;
+}
+
+/* Buttons flat style */
+button {
+  border-radius: 3px;
 } 
