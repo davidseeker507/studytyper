@@ -20,17 +20,44 @@
     <section id="setupSection">
       <textarea id="inputText" placeholder="Paste your study material here..." rows="8"></textarea>
       <button id="startBtn" disabled>Start Practice</button>
+      <div class="extras">
+        <select id="sampleSelect" class="select-field">
+          <option value="">-- Sample texts --</option>
+          <option value="lorem">Lorem Ipsum</option>
+          <option value="declaration">US Declaration Preamble</option>
+          <option value="twister">Tongue Twister</option>
+        </select>
+        <label for="fileInput" class="file-label">Upload .txt</label>
+        <input type="file" id="fileInput" accept=".txt" hidden />
+      </div>
     </section>
 
     <section id="raceSection" class="hidden">
+      <div class="progress"><div id="progressBar"></div></div>
       <div id="displayText" class="display-text"></div>
       <input type="text" id="typeInput" placeholder="Start typing here..." autocomplete="off" spellcheck="false" />
       <div class="stats">
         <span>Time: <strong id="timeStat">0s</strong></span>
         <span>WPM: <strong id="wpmStat">0</strong></span>
         <span>Accuracy: <strong id="accuracyStat">100%</strong></span>
+        <span>Errors: <strong id="errorStat">0</strong></span>
+        <span>CPM: <strong id="cpmStat">0</strong></span>
       </div>
       <button id="resetBtn">Reset</button>
+    </section>
+
+    <!-- Countdown overlay -->
+    <div id="countdownOverlay" class="overlay hidden"><span id="countdownText"></span></div>
+
+    <!-- History -->
+    <section id="historySection" class="history">
+      <h3>Session History</h3>
+      <table id="historyTable">
+        <thead>
+          <tr><th>Date</th><th>WPM</th><th>Accuracy</th><th>Words</th><th>Time (s)</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </section>
 
     <!-- Result Modal -->
