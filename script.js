@@ -40,21 +40,30 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Sound setup ---
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
   const audioCtx = new AudioCtx();
-  function beep(freq, duration=0.05) {
-    const oscillator = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    oscillator.frequency.value = freq;
-    oscillator.type = 'square';
-    oscillator.connect(gain);
-    gain.connect(audioCtx.destination);
-    oscillator.start();
-    setTimeout(() => {
-      oscillator.stop();
-    }, duration * 1000);
+
+  function softBeep(freq, duration = 0.06, volume = 0.05) {
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.value = freq;
+    gainNode.gain.value = volume;
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    const now = audioCtx.currentTime;
+    // quick fade-out to avoid click
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+    osc.start(now);
+    osc.stop(now + duration);
   }
 
-  function playKeySound() { beep(880, 0.03); }
-  function playFinishSound() { beep(440, 0.2); }
+  function playKeySound() {
+    softBeep(600, 0.04, 0.04);
+  }
+
+  function playFinishSound() {
+    softBeep(500, 0.12, 0.06);
+    setTimeout(() => softBeep(700, 0.12, 0.06), 120); // gentle double tone
+  }
 
   // Load history from localStorage
   loadHistory();
