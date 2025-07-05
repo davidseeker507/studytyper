@@ -555,4 +555,11 @@ button:disabled { background: #425f9c; }
 }
 .settings-content label {
   color: var(--fg);
-} 
+}
+
+/* Disable reveal lines */
+.reveal-one .display-text,
+.reveal-three .display-text { max-height: none; overflow: visible; }
+
+/* Show settings headers */
+.settings-section h3 { display: block !important; } 

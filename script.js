@@ -201,7 +201,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function highlightCurrentChar(position) {
     [...displayText.children].forEach(span => span.classList.remove('current'));
     if (position < displayText.children.length) {
-      displayText.children[position].classList.add('current');
+      const currentSpan = displayText.children[position];
+      currentSpan.classList.add('current');
     }
   }
 
@@ -357,7 +358,8 @@ document.addEventListener('DOMContentLoaded', () => {
     caret: 'underline',
     autoFocus: true,
     fileLimitMB: 1,
-    historyLimit: 20
+    historyLimit: 20,
+    focusLine: false
   };
   function getSettings() {
     return { ...DEFAULT_SETTINGS, ...(JSON.parse(localStorage.getItem('settings') || '{}')) };
@@ -434,8 +436,4 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     reader.readAsText(file);
   });
-
-  // ----- MODIFY EXISTING BEHAVIOUR -----
-  // adjust pushHistory to respect historyLimit
-  const originalPushHistory = pushHistory; // but pushHistory defined later; so we redefine after definition? We'll wrap after function definition.
 }); 
