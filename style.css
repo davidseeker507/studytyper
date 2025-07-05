@@ -53,13 +53,20 @@ button:disabled {
 .display-text {
   max-width: 800px;
   padding: 1rem;
-  font-size: 1.2rem;
-  line-height: 1.6;
+  font-size: 1.6rem;
+  line-height: 1.45;
   background: #fff;
   border: 2px solid #ddd;
   border-radius: 4px;
-  margin-bottom: 1rem;
+  margin-bottom: 0;
   user-select: none;
+  height: calc(1.6rem * 1.45 * 3); /* approx 3 lines */
+  overflow-y: auto;
+  scrollbar-width: none;          /* hide scrollbar in Firefox */
+}
+
+.display-text::-webkit-scrollbar {
+  display: none;                  /* hide scrollbar in WebKit */
 }
 
 .display-text .correct {
@@ -74,14 +81,16 @@ button:disabled {
   text-decoration: underline;
 }
 
+/* Hide the visible typing box but keep it in DOM for script logic */
 #typeInput {
-  width: 100%;
-  max-width: 800px;
-  padding: 0.8rem;
-  font-size: 1.2rem;
-  border: 2px solid #0047ab;
-  border-radius: 4px;
-  margin-bottom: 1rem;
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  clip: rect(0 0 0 0) !important;
+  overflow: hidden !important;
 }
 
 .stats {
@@ -402,4 +411,119 @@ body.dark .file-label {
 body.dark .file-label:hover,
 body.dark .select-field:hover {
   background: #2d2d2d;
+}
+
+/* Prevent width jitter while typing */
+#raceSection {
+  width: 100%; /* occupy full row so inner elements don't change parent width */
+}
+
+/* Keep stats/block elements centered but width‐stable */
+#raceSection > * {
+  max-width: 800px;
+}
+
+/* ---------------- Monkeytype inspired theme ---------------- */
+:root {
+  --accent: #4f8df2;
+  --bg: #13151a;
+  --fg: #e5e9f0;
+  --error: #ff5f5f;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Fira Code', Menlo, Consolas, 'Courier New', monospace;
+}
+
+/* Minimal header */
+header {
+  background: transparent;
+  color: var(--fg);
+  padding: 0.5rem 0;
+  border: none;
+}
+
+/* Center main content */
+.container {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+/* Display text styled like Monkeytype */
+.display-text {
+  max-width: 900px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  font-size: 2rem;
+  line-height: 2.6rem;
+  text-align: center;
+  margin-bottom: 0.8rem;
+  height: auto;
+  overflow: visible;
+}
+
+.display-text span { opacity: 0.4; }
+.display-text .correct { color: var(--fg); opacity: 1; }
+.display-text .incorrect { color: var(--error); opacity: 1; }
+.display-text .current { position: relative; opacity: 1; }
+.display-text .current::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 2px;
+  background: var(--accent);
+  animation: caretBlink 1s steps(1) infinite;
+}
+@keyframes caretBlink { 0%,50% {opacity: 1;} 51%,100% {opacity: 0;} }
+
+/* Hide the separate input box visually */
+#typeInput {
+  opacity: 0;
+  position: absolute;
+  left: -9999px;
+}
+
+/* Progress bar styling */
+.progress { background: #2a2d36; height: 8px; border-radius: 4px; max-width: 900px; }
+#progressBar { background: var(--accent); }
+
+/* Stats bar */
+.stats { background: transparent; color: #888; gap: 1.2rem; font-size: 1rem; }
+
+/* Buttons */
+button { background: var(--accent); color: #fff; border-radius: 4px; transition: background 0.15s ease; }
+button:hover:not(:disabled) { background: #6598ff; }
+button:disabled { background: #425f9c; }
+
+/* Smooth typing animations */
+.display-text span {
+  transition: opacity 0.15s ease;
+}
+
+@keyframes pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+.display-text .correct {
+  animation: pop 0.18s ease;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  50% { transform: translateX(2px); }
+  75% { transform: translateX(-2px); }
+  100% { transform: translateX(0); }
+}
+.display-text .incorrect {
+  animation: shake 0.25s ease;
 } 
