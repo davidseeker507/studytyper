@@ -321,6 +321,11 @@ document.addEventListener('DOMContentLoaded', () => {
   fileInput.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
+    if (file.size > settings.fileLimitMB * 1024 * 1024) {
+      alert(`File exceeds ${settings.fileLimitMB} MB limit.`);
+      e.target.value = '';
+      return;
+    }
     const reader = new FileReader();
     reader.onload = (ev) => {
       inputText.value = ev.target.result;
@@ -332,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function pushHistory(session) {
     const hist = JSON.parse(localStorage.getItem('history') || '[]');
     hist.unshift(session);
-    localStorage.setItem('history', JSON.stringify(hist.slice(0, 20))); // keep last 20
+    localStorage.setItem('history', JSON.stringify(hist.slice(0, settings.historyLimit)));
     loadHistory();
   }
 
@@ -345,4 +350,92 @@ document.addEventListener('DOMContentLoaded', () => {
       historyTableBody.appendChild(tr);
     });
   }
+
+  // ----- SETTINGS MANAGEMENT -----
+  const DEFAULT_SETTINGS = {
+    theme: 'system',
+    caret: 'underline',
+    autoFocus: true,
+    fileLimitMB: 1,
+    historyLimit: 20
+  };
+  function getSettings() {
+    return { ...DEFAULT_SETTINGS, ...(JSON.parse(localStorage.getItem('settings') || '{}')) };
+  }
+  function saveSettings(s) { localStorage.setItem('settings', JSON.stringify(s)); }
+
+  let settings = getSettings();
+
+  // apply theme on load (override earlier approach)
+  applyTheme(settings.theme === 'dark' ? true : settings.theme === 'light' ? false : prefersDark);
+
+  // caret style via body classes
+  function applyCaretStyle() {
+    document.body.classList.toggle('caret-bar', settings.caret === 'bar');
+    document.body.classList.toggle('caret-none', settings.caret === 'none');
+  }
+  applyCaretStyle();
+
+  // settings modal elements
+  const settingsBtn = document.getElementById('settingsBtn');
+  const settingsModal = document.getElementById('settingsModal');
+  const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+  const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+
+  // populate UI when opened
+  settingsBtn.addEventListener('click', () => {
+    // open modal
+    settingsModal.classList.remove('hidden');
+    // reflect current settings
+    document.querySelectorAll('input[name="themeChoice"]').forEach(r => r.checked = (r.value === settings.theme));
+    document.querySelectorAll('input[name="caretChoice"]').forEach(r => r.checked = (r.value === settings.caret));
+    document.getElementById('autoFocusToggle').checked = settings.autoFocus;
+    document.getElementById('fileSizeLimit').value = settings.fileLimitMB;
+    document.getElementById('historyLimit').value = settings.historyLimit;
+  });
+  closeSettingsBtn.addEventListener('click', () => settingsModal.classList.add('hidden'));
+
+  saveSettingsBtn.addEventListener('click', () => {
+    settings.theme = document.querySelector('input[name="themeChoice"]:checked')?.value || settings.theme;
+    settings.caret = document.querySelector('input[name="caretChoice"]:checked')?.value || settings.caret;
+    settings.autoFocus = document.getElementById('autoFocusToggle').checked;
+    settings.fileLimitMB = parseFloat(document.getElementById('fileSizeLimit').value) || settings.fileLimitMB;
+    settings.historyLimit = parseInt(document.getElementById('historyLimit').value) || settings.historyLimit;
+    saveSettings(settings);
+    applyTheme(settings.theme === 'dark' ? true : settings.theme === 'light' ? false : prefersDark);
+    applyCaretStyle();
+    settingsModal.classList.add('hidden');
+  });
+
+  // history export/import
+  const exportBtn = document.getElementById('exportHistoryBtn');
+  const importInput = document.getElementById('importHistoryInput');
+  exportBtn.addEventListener('click', () => {
+    const data = localStorage.getItem('history') || '[]';
+    const blob = new Blob([data], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'studyTyperHistory.json';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+  importInput.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const arr = JSON.parse(ev.target.result);
+        if (Array.isArray(arr)) {
+          localStorage.setItem('history', JSON.stringify(arr));
+          loadHistory();
+        } else alert('Invalid history file');
+      } catch { alert('Invalid JSON'); }
+    };
+    reader.readAsText(file);
+  });
+
+  // ----- MODIFY EXISTING BEHAVIOUR -----
+  // adjust pushHistory to respect historyLimit
+  const originalPushHistory = pushHistory; // but pushHistory defined later; so we redefine after definition? We'll wrap after function definition.
 }); 

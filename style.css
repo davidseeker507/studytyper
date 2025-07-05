@@ -172,16 +172,7 @@ footer {
 }
 
 /* Dark-mode toggle button */
-.theme-btn {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: transparent;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: inherit;
-}
+.theme-btn { display: none; }
 
 /* Dark mode overrides */
 body.dark {
@@ -526,4 +517,41 @@ button:disabled { background: #425f9c; }
 }
 .display-text .incorrect {
   animation: shake 0.25s ease;
+}
+
+/* Settings button similar to theme */
+.settings-btn {
+  position: absolute;
+  top: 1rem;
+  right: 3.2rem; /* leave space for theme button */
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: inherit;
+}
+
+/* Settings modal tweaks */
+.settings-content h3 { margin: 0.8rem 0 0.4rem; font-size: 1rem; }
+.settings-section { margin-bottom: 0.8rem; }
+.settings-section label { margin-right: 1rem; }
+.settings-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.8rem; justify-content: center; }
+
+/* Caret bar style */
+.caret-bar .display-text .current::after {
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 100%;
+}
+
+/* Caret none */
+.caret-none .display-text .current::after { display: none; }
+
+.settings-content {
+  background: #1f2129; /* ensure dark backdrop regardless of global overrides */
+  color: var(--fg);
+}
+.settings-content label {
+  color: var(--fg);
 } 

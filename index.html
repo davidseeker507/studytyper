@@ -14,6 +14,8 @@
     <p>Reinforce your notes while practicing typing speed</p>
     <!-- Dark-mode toggle -->
     <button id="themeToggle" class="theme-btn" aria-label="Toggle dark mode">🌙</button>
+    <!-- Add immediately after dark-mode toggle button -->
+    <button id="settingsBtn" class="settings-btn" aria-label="Settings">⚙️</button>
   </header>
 
   <main class="container">
@@ -66,6 +68,52 @@
         <h2>Great job!</h2>
         <p id="resultSummary"></p>
         <button id="closeModalBtn">Close</button>
+      </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal hidden">
+      <div class="modal-content settings-content">
+        <h2>Settings</h2>
+
+        <section class="settings-section">
+          <h3>Theme</h3>
+          <label><input type="radio" name="themeChoice" value="system"> System</label>
+          <label><input type="radio" name="themeChoice" value="light"> Light</label>
+          <label><input type="radio" name="themeChoice" value="dark"> Dark</label>
+        </section>
+
+        <section class="settings-section">
+          <h3>Caret Style</h3>
+          <label><input type="radio" name="caretChoice" value="underline"> Underline</label>
+          <label><input type="radio" name="caretChoice" value="bar"> Blinking Bar</label>
+          <label><input type="radio" name="caretChoice" value="none"> None</label>
+        </section>
+
+        <section class="settings-section">
+          <h3>Auto Focus on Start</h3>
+          <label><input type="checkbox" id="autoFocusToggle"> Enable</label>
+        </section>
+
+        <section class="settings-section">
+          <h3>Upload File Size Limit (MB)</h3>
+          <input type="number" id="fileSizeLimit" min="0.1" max="5" step="0.1" style="width: 80px;"> MB
+        </section>
+
+        <section class="settings-section">
+          <h3>History Entries to Keep</h3>
+          <input type="number" id="historyLimit" min="1" max="100" step="1" style="width: 60px;">
+        </section>
+
+        <div class="settings-actions">
+          <button id="exportHistoryBtn">Export History</button>
+          <label class="file-label"><input type="file" id="importHistoryInput" accept="application/json" hidden/>Import History</label>
+        </div>
+
+        <div class="settings-actions">
+          <button id="saveSettingsBtn">Save</button>
+          <button id="closeSettingsBtn">Close</button>
+        </div>
       </div>
     </div>
   </main>
