@@ -524,9 +524,10 @@ button:disabled { background: #425f9c; }
 .settings-btn {
   align-self: center;
   margin-bottom: 0.4rem;
+  font-size: 2.6rem;
 }
 
-.settings-btn .label { font-size: 1rem; }
+.settings-btn .label { font-size: 1.2rem; }
 
 /* Settings modal tweaks */
 .settings-content h3 { margin: 0.8rem 0 0.4rem; font-size: 1rem; }
@@ -600,4 +601,7 @@ body.typing-mode #raceSection {
 }
 body.typing-mode header,
 body.typing-mode footer,
-body.typing-mode #setupSection { display: none; } 
+body.typing-mode #setupSection { display: none; }
+
+#wpmGraph { background:#1b1e24; border:1px solid #333; border-radius:4px; }
+.graph-label { text-align:center; font-size:0.85rem; color:var(--fg); margin-bottom:0.5rem; } 

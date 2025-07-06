@@ -208,14 +208,79 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Graph variables
+  const wpmGraph = document.getElementById('wpmGraph');
+  const graphCtx = wpmGraph.getContext ? wpmGraph.getContext('2d') : null;
+  let wpmData = [];
+
+  function drawGraph() {
+    if (!graphCtx) return;
+    const width = wpmGraph.width;
+    const height = wpmGraph.height;
+    graphCtx.clearRect(0,0,width,height);
+    // background grid
+    const maxWpm = Math.max(...wpmData, 60);
+    const roundedMax = Math.ceil(maxWpm/20)*20;
+    graphCtx.strokeStyle = '#333';
+    graphCtx.lineWidth = 1;
+    for (let yVal = 0; yVal<=roundedMax; yVal+=20){
+      const y = height - (yVal/roundedMax)*(height-4)-2;
+      graphCtx.beginPath();
+      graphCtx.moveTo(0,y);
+      graphCtx.lineTo(width,y);
+      graphCtx.stroke();
+    }
+
+    // area fill
+    graphCtx.fillStyle = 'rgba(79,141,242,0.25)';
+    graphCtx.beginPath();
+    const scaleY = (val)=> height - (val/roundedMax)* (height-4) -2;
+    const stepX = width / (wpmData.length-1||1);
+    wpmData.forEach((val,idx)=>{
+      const x = idx*stepX;
+      const y = scaleY(val);
+      if(idx===0) graphCtx.moveTo(x,y); else graphCtx.lineTo(x,y);
+    });
+    graphCtx.lineTo(width,height);
+    graphCtx.lineTo(0,height);
+    graphCtx.closePath();
+    graphCtx.fill();
+
+    // main line
+    graphCtx.strokeStyle = '#4f8df2';
+    graphCtx.lineWidth = 2;
+    graphCtx.beginPath();
+    wpmData.forEach((val,idx)=>{
+      const x = idx*stepX;
+      const y = scaleY(val);
+      if(idx===0) graphCtx.moveTo(x,y); else graphCtx.lineTo(x,y);
+    });
+    graphCtx.stroke();
+    // y-axis labels (min and max)
+    graphCtx.fillStyle = '#888';
+    graphCtx.font = '10px monospace';
+    graphCtx.textAlign = 'left';
+    graphCtx.fillText(roundedMax+' wpm',2,8);
+    graphCtx.fillText('0',2,height-4);
+  }
+
+  // modify startTimer to reset graph
   function startTimer() {
     startTime = Date.now();
+    wpmData = [];
+    drawGraph();
     timerInterval = setInterval(() => {
       const seconds = Math.floor((Date.now() - startTime) / 1000);
       timeStat.textContent = `${seconds}s`;
+      // capture current WPM each second
+      const currentWpm = Number(wpmStat.textContent) || 0;
+      wpmData.push(currentWpm);
+      if (wpmData.length > 60) wpmData.shift();
+      drawGraph();
     }, 1000);
   }
 
+  // clear graph in resetStats
   function resetStats() {
     startTime = null;
     clearInterval(timerInterval);
@@ -223,6 +288,8 @@ document.addEventListener('DOMContentLoaded', () => {
     wpmStat.textContent = '0';
     accuracyStat.textContent = '100%';
     typeInput.value = '';
+    wpmData = [];
+    drawGraph();
   }
 
   function updateStats(correctChars, typedChars) {
