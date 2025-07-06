@@ -100,6 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Show race section
         setupSection.classList.add('hidden');
         raceSection.classList.remove('hidden');
+        window.scrollTo({top:0, left:0});
+        document.body.classList.add('typing-mode');
         typeInput.focus();
       }
     }, 1000);
@@ -297,6 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
     startBtn.disabled = true;
     displayText.innerHTML = '';
     resetStats();
+    document.body.classList.remove('typing-mode');
   }
 
   function resetAll() {
@@ -309,6 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
     startBtn.disabled = true;
     displayText.innerHTML = '';
     resetStats();
+    document.body.classList.remove('typing-mode');
   }
 
   sampleSelect.addEventListener('change', () => {

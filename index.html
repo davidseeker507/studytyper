@@ -14,12 +14,11 @@
     <p>Reinforce your notes while practicing typing speed</p>
     <!-- Dark-mode toggle -->
     <button id="themeToggle" class="theme-btn" aria-label="Toggle dark mode">🌙</button>
-    <!-- Add immediately after dark-mode toggle button -->
-    <button id="settingsBtn" class="settings-btn" aria-label="Settings">⚙️</button>
   </header>
 
   <main class="container">
     <section id="setupSection">
+      <button id="settingsBtn" class="settings-btn" aria-label="Settings"><span class="icon">⚙️</span><span class="label">Settings</span></button>
       <textarea id="inputText" placeholder="Paste your study material here..." rows="8"></textarea>
       <button id="startBtn" disabled>Start Practice</button>
       <div class="extras">
@@ -50,6 +49,8 @@
 
     <!-- Countdown overlay -->
     <div id="countdownOverlay" class="overlay hidden"><span id="countdownText"></span></div>
+    <!-- Paused overlay -->
+    <div id="pausedOverlay" class="hidden">Paused</div>
 
     <!-- History -->
     <section id="historySection" class="history">
@@ -68,6 +69,7 @@
         <h2>Great job!</h2>
         <p id="resultSummary"></p>
         <button id="closeModalBtn">Close</button>
+        <button id="copyResultBtn">Copy Result</button>
       </div>
     </div>
 
@@ -108,6 +110,21 @@
         <section class="settings-section">
           <h3>Focus Line</h3>
           <label><input type="checkbox" id="focusLineToggle"> Dim non-current line</label>
+        </section>
+
+        <section class="settings-section">
+          <h3>Font Family</h3>
+          <select id="fontSelect" class="select-field">
+            <option value="Fira Code">Fira Code</option>
+            <option value="JetBrains Mono">JetBrains Mono</option>
+            <option value="Inter">Inter</option>
+            <option value="System">System UI</option>
+          </select>
+        </section>
+
+        <section class="settings-section">
+          <h3>Key Sound Volume</h3>
+          <input type="range" id="volumeSlider" min="0" max="1" step="0.05" style="width: 160px;">
         </section>
 
         <div class="settings-actions">

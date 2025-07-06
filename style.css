@@ -20,16 +20,16 @@ header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 1.2rem;
   padding: 2rem 1rem;
 }
 
 textarea#inputText {
   width: 100%;
-  max-width: 800px;
-  padding: 1rem;
-  font-size: 1rem;
+  max-width: 1600px;
+  padding: 2rem;
+  font-size: 2rem;
   border: 2px solid #0047ab;
   border-radius: 4px;
   resize: vertical;
@@ -52,7 +52,7 @@ button:disabled {
 }
 
 .display-text {
-  max-width: 800px;
+  max-width: 1600px;
   padding: 1rem;
   font-size: 1.6rem;
   line-height: 1.45;
@@ -295,7 +295,7 @@ button {
 /* Progress bar */
 .progress {
   width: 100%;
-  max-width: 800px;
+  max-width: 1600px;
   height: 6px;
   background: #d0d7de;
   border-radius: 3px;
@@ -412,7 +412,7 @@ body.dark .select-field:hover {
 
 /* Keep stats/block elements centered but width‐stable */
 #raceSection > * {
-  max-width: 800px;
+  max-width: 1600px;
 }
 
 /* ---------------- Monkeytype inspired theme ---------------- */
@@ -447,7 +447,7 @@ header {
 
 /* Display text styled like Monkeytype */
 .display-text {
-  max-width: 900px;
+  max-width: 1600px;
   padding: 0;
   background: transparent;
   border: none;
@@ -484,7 +484,7 @@ header {
 }
 
 /* Progress bar styling */
-.progress { background: #2a2d36; height: 8px; border-radius: 4px; max-width: 900px; }
+.progress { background: #2a2d36; height: 8px; border-radius: 4px; max-width: 1600px; }
 #progressBar { background: var(--accent); }
 
 /* Stats bar */
@@ -522,15 +522,11 @@ button:disabled { background: #425f9c; }
 
 /* Settings button similar to theme */
 .settings-btn {
-  position: absolute;
-  top: 1rem;
-  right: 3.2rem; /* leave space for theme button */
-  background: transparent;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  color: inherit;
+  align-self: center;
+  margin-bottom: 0.4rem;
 }
+
+.settings-btn .label { font-size: 1rem; }
 
 /* Settings modal tweaks */
 .settings-content h3 { margin: 0.8rem 0 0.4rem; font-size: 1rem; }
@@ -562,4 +558,46 @@ button:disabled { background: #425f9c; }
 .reveal-three .display-text { max-height: none; overflow: visible; }
 
 /* Show settings headers */
-.settings-section h3 { display: block !important; } 
+.settings-section h3 { display: block !important; }
+
+/* Paused state overlay */
+#pausedOverlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 3rem; z-index: 1200;
+}
+#pausedOverlay.hidden { display:none; }
+
+/* Center setup section elements */
+#setupSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+#setupSection .extras {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+/* Fullscreen typing mode */
+body.typing-mode #raceSection {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: var(--bg, #13151a);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 2rem;
+  z-index: 1500;
+}
+body.typing-mode header,
+body.typing-mode footer,
+body.typing-mode #setupSection { display: none; } 
