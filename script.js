@@ -430,7 +430,9 @@ document.addEventListener('DOMContentLoaded', () => {
     autoFocus: true,
     fileLimitMB: 1,
     historyLimit: 20,
-    focusLine: false
+    focusLine: false,
+    font: 'Fira Code',
+    themePreset: 'default'
   };
   function getSettings() {
     return { ...DEFAULT_SETTINGS, ...(JSON.parse(localStorage.getItem('settings') || '{}')) };
@@ -465,6 +467,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('autoFocusToggle').checked = settings.autoFocus;
     document.getElementById('fileSizeLimit').value = settings.fileLimitMB;
     document.getElementById('historyLimit').value = settings.historyLimit;
+    document.getElementById('themePreset').value = settings.themePreset;
   });
   closeSettingsBtn.addEventListener('click', () => settingsModal.classList.add('hidden'));
 
@@ -474,9 +477,11 @@ document.addEventListener('DOMContentLoaded', () => {
     settings.autoFocus = document.getElementById('autoFocusToggle').checked;
     settings.fileLimitMB = parseFloat(document.getElementById('fileSizeLimit').value) || settings.fileLimitMB;
     settings.historyLimit = parseInt(document.getElementById('historyLimit').value) || settings.historyLimit;
+    settings.themePreset = document.getElementById('themePreset').value;
     saveSettings(settings);
     applyTheme(settings.theme === 'dark' ? true : settings.theme === 'light' ? false : prefersDark);
     applyCaretStyle();
+    setThemeVars(THEMES[settings.themePreset]||THEMES.default);
     settingsModal.classList.add('hidden');
   });
 
@@ -507,4 +512,21 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     reader.readAsText(file);
   });
+
+  // Theme presets
+  const THEMES = {
+    default: { accent:'#f0c674', bg:'#2b2b2b', fg:'#f1f1f1', error:'#ff5f5f'},
+    nord   : { accent:'#88c0d0', bg:'#2e3440', fg:'#e5e9f0', error:'#bf616a'},
+    dracula: { accent:'#bd93f9', bg:'#282a36', fg:'#f8f8f2', error:'#ff5555'},
+    serika : { accent:'#f0c674', bg:'#1b1b1b', fg:'#eaeaea', error:'#ff5f5f'},
+    cmyk   : { accent:'#00aaff', bg:'#0d0d0d', fg:'#ffffff', error:'#ff00ff'},
+    monokai: { accent:'#f92672', bg:'#272822', fg:'#f8f8f2', error:'#fd971f'}
+  };
+
+  function setThemeVars(obj){
+    Object.entries(obj).forEach(([k,v])=>document.documentElement.style.setProperty(`--${k}`,v));
+  }
+
+  // apply preset on load after applyFont()
+  setThemeVars(THEMES[settings.themePreset]||THEMES.default);
 }); 
