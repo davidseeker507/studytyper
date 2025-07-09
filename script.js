@@ -1,3 +1,5 @@
+import { supabase } from './supabaseClient.js';
+
 document.addEventListener('DOMContentLoaded', () => {
   const inputText = document.getElementById('inputText');
   const startBtn = document.getElementById('startBtn');
@@ -321,8 +323,9 @@ document.addEventListener('DOMContentLoaded', () => {
     setupSection.classList.remove('hidden');
     raceSection.classList.add('hidden');
     typeInput.disabled = false;
-    inputText.value = '';
-    startBtn.disabled = true;
+    // Keep the original text so users can immediately retry the same material
+    // inputText.value remains unchanged
+    startBtn.disabled = false;
     displayText.innerHTML = '';
     resetStats();
 
@@ -362,8 +365,9 @@ document.addEventListener('DOMContentLoaded', () => {
     setupSection.classList.remove('hidden');
     raceSection.classList.add('hidden');
     typeInput.disabled = false;
-    inputText.value = '';
-    startBtn.disabled = true;
+    // Keep the original text so users can immediately retry the same material
+    // inputText.value remains unchanged
+    startBtn.disabled = false;
     displayText.innerHTML = '';
     resetStats();
     document.body.classList.remove('typing-mode');
@@ -406,17 +410,23 @@ document.addEventListener('DOMContentLoaded', () => {
     reader.readAsText(file);
   });
 
-  function pushHistory(session) {
-    const hist = JSON.parse(localStorage.getItem('history') || '[]');
-    hist.unshift(session);
-    localStorage.setItem('history', JSON.stringify(hist.slice(0, settings.historyLimit)));
-    loadHistory();
+  async function pushHistory(session) {
+    const { error } = await supabase.from('history').insert(session);
+    if (error) console.error('Supabase insert error:', error);
+    else loadHistory();
   }
 
-  function loadHistory() {
-    const hist = JSON.parse(localStorage.getItem('history') || '[]');
+  async function loadHistory() {
+    const { data, error } = await supabase
+      .from('history')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) {
+      console.error('Supabase select error:', error);
+      return;
+    }
     historyTableBody.innerHTML = '';
-    hist.forEach(h => {
+    data.forEach(h => {
       const tr = document.createElement('tr');
       tr.innerHTML = `<td>${h.date}</td><td>${h.wpm}</td><td>${h.accuracy}%</td><td>${h.words}</td><td>${h.time}</td>`;
       historyTableBody.appendChild(tr);

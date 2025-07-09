@@ -625,3 +625,17 @@ footer { background: var(--bg); color: #aaa; }
 
 .settings-content .file-label { color: #000 !important; }
 .settings-content .file-label:hover { background: #ddd !important; } 
+
+/* Navigation */
+.nav {
+  margin-top: 0.5rem;
+}
+.nav a {
+  color: inherit;
+  margin: 0 0.6rem;
+  text-decoration: none;
+  font-weight: 600;
+}
+.nav a:hover {
+  text-decoration: underline;
+} 
